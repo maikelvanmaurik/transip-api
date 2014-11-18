@@ -1,0 +1,10 @@
+{
+    "name": "maikelvanmaurik/transip-api",
+    "authors": [
+        {
+            "name": "Maikel van Maurik",
+            "email": "maikelvanmaurik@gmail.com"
+        }
+    ],
+    "require": {}
+}
