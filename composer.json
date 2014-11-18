@@ -6,5 +6,6 @@
             "email": "maikelvanmaurik@gmail.com"
         }
     ],
+	"minimum-stability": "dev",
     "require": {}
 }
