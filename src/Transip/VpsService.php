@@ -40,13 +40,12 @@ class Transip_VpsService
 			$errors     = array();
 			if(!class_exists('SoapClient') || !in_array('soap', $extensions))
 			{
-				$errors[] = 'The PHP SOAP extension doesn\'t seem to be installed. You need to install the PHP SOAP extension. (See: http://www.php.net/manual/en/book.soap.php)';
+				throw new Exception('The PHP SOAP extension doesn\'t seem to be installed. You need to install the PHP SOAP extension. (See: http://www.php.net/manual/en/book.soap.php)');
 			}
 			if(!in_array('openssl', $extensions))
 			{
-				$errors[] = 'The PHP OpenSSL extension doesn\'t seem to be installed. You need to install PHP with the OpenSSL extension. (See: http://www.php.net/manual/en/book.openssl.php)';
+				throw new Exception('The PHP OpenSSL extension doesn\'t seem to be installed. You need to install PHP with the OpenSSL extension. (See: http://www.php.net/manual/en/book.openssl.php)');
 			}
-			if(!empty($errors)) die('<p>' . implode("</p>\n<p>", $errors) . '</p>');
 
 			$classMap = array(
 				'Product' => 'Transip_Product',
@@ -102,7 +101,7 @@ class Transip_VpsService
 	{
 		// Fixup our private key, copy-pasting the key might lead to whitespace faults
 		if(!preg_match('/-----BEGIN (RSA )?PRIVATE KEY-----(.*)-----END (RSA )?PRIVATE KEY-----/si', Transip_ApiSettings::$privateKey, $matches))
-			die('<p>Could not find your private key, please supply your private key in the ApiSettings file. You can request a new private key in your TransIP Controlpanel.</p>');
+			throw new Exception('Could not find your private key, please supply your private key in the ApiSettings file. You can request a new private key in your TransIP Controlpanel.');
 
 		$key = $matches[2];
 		$key = preg_replace('/\s*/s', '', $key);
@@ -112,7 +111,7 @@ class Transip_VpsService
 
 		$digest = self::_sha512Asn1(self::_encodeParameters($parameters));
 		if(!@openssl_private_encrypt($digest, $signature, $key))
-			die('<p>Could not sign your request, please supply your private key in the ApiSettings file. You can request a new private key in your TransIP Controlpanel.</p>');
+			throw new Exception('Could not sign your request, please supply your private key in the ApiSettings file. You can request a new private key in your TransIP Controlpanel.');
 
 		return base64_encode($signature);
 	}
